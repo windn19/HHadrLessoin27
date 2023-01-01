@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %} Регионы {% endblock %}
+
+{% block head %}Известные регионы{% endblock %}
+
+{% block body %}
+    {% load static %}
+    <section class="page-section clearfix">
+        <div class="container">
+            <div class="intro">
+                <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{% static '/assets/img/412022.jpg' %}" alt="...">
+                <div class="intro-text left-0 text-center bg-faded p-5 rounded">
+                 <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Номер</th>
+                                <th scope="col">Название региона</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           {% for item in page_obj %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }} </th>
+                                    <td><a href="{% url 'hhapp:area_detail' pk=item.pk %}">{{ item.name.title }}</a></td>
+                                    <td><a href="{% url 'hhapp:area_update' pk=item.pk %}">Изменить</a></td>
+                                    <td><a href="{% url 'hhapp:area_delete' pk=item.pk %}">Удалить</a></td>
+                                </tr>
+                           {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
+
+                            {% for i in page_obj.paginator.get_elided_page_range %}
+                                {% if page_obj.paginator.ELLIPSIS == i %}
+                                   {{ i }}
+                                {% else %}
+                                    <a href="?page={{ i }}"
+                                       class="{% if i == page_obj.number %}sr-only{% endif %}">{{ i }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <a href="{% url 'hhapp:area_create' %}">Создать</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}Привет, привет - от больших штиблет{% endblock%}
